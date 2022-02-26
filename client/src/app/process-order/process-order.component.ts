@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { lineItem, Po } from '../models';
+import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
+import { LineItem, Po } from '../models';
 import { OrderService } from '../order.service';
 
 @Component({
@@ -10,31 +10,44 @@ import { OrderService } from '../order.service';
 })
 export class ProcessOrderComponent implements OnInit {
 
-  form: FormGroup = new FormGroup({})
+  form!: FormGroup
+  lineItemFormArray!: FormArray
 
-  listOfLineItem: lineItem[] = []
+  listOfLineItem: LineItem[] = []
 
   constructor(private fb: FormBuilder, private orderService: OrderService) { }
 
   ngOnInit(): void {
+    this.lineItemFormArray = this.fb.array([])
+
     this.form = this.fb.group({
-      name: this.fb.control(""),
-      email: this.fb.control("")
+      name: this.fb.control("", [Validators.required, Validators.minLength(3)]),
+      email: this.fb.control("", [Validators.email, Validators.required]),
+      listOfItems: this.lineItemFormArray
     })
   }
 
-  addItemToList(name: string, quantity: string, price: string) {
-    let item = new lineItem(name, +quantity, +price)
-    this.listOfLineItem.push(item)
+  addInput() {
+    const lineItemGroup = this.fb.group({
+      name: this.fb.control('', [Validators.required, Validators.minLength(3)]),
+      quantity: this.fb.control('', [Validators.required]),
+      price: this.fb.control('', Validators.required)
+    })
+
+    this.lineItemFormArray.push(lineItemGroup)
   }
 
   placeOrder() {
-    console.log(this.form.value.name)
-    console.log(this.form.value.email)
-    console.log(this.listOfLineItem)
+    for (let i =0; i < this.lineItemFormArray.length; i++) {
+      let item = new LineItem(this.lineItemFormArray.value[i].name, this.lineItemFormArray.value[i].quantity.toString(), this.lineItemFormArray.value[i].price.toString())
+      this.listOfLineItem.push(item)
+    }
     let po = new Po(this.form.value.name, this.form.value.email, this.listOfLineItem)
-    console.log(po)
     this.orderService.placeOrder(po)
+  }
+
+  deleteLineItem(itemNumber: number) {
+    this.lineItemFormArray.removeAt(itemNumber)
   }
 
 }

@@ -7,6 +7,11 @@ import { ProcessOrderComponent } from './process-order/process-order.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OrderService } from './order.service';
 import { HttpClientModule } from '@angular/common/http';
+import { RouterModule, Routes } from '@angular/router';
+
+const  appRoutes: Routes = [
+  { path: "", component: ProcessOrderComponent}
+]
 
 @NgModule({
   declarations: [
@@ -18,7 +23,8 @@ import { HttpClientModule } from '@angular/common/http';
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule.forRoot(appRoutes)
   ],
   providers: [OrderService],
   bootstrap: [AppComponent]

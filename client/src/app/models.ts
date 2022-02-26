@@ -1,8 +1,8 @@
-export class lineItem {
+export class LineItem {
   constructor (
     public name: string,
-    public quantity: number,
-    public price: number)
+    public quantity: string,
+    public price: string)
     {}
 }
 
@@ -11,7 +11,7 @@ export class Po {
   constructor(
     public name: string,
     public email: string,
-    public listOfItems: lineItem[]
+    public listOfItems: LineItem[]
   )
   {}
 }

@@ -8,9 +8,9 @@ export class OrderService {
 
   constructor(private http: HttpClient) {}
 
-  placeOrder(po: Po): Promise<Po> {
-    return(lastValueFrom(
-      this.http.post<Po>("http://localhost:8080/order", po)
+  async placeOrder(po: Partial<Po>) {
+    return await(lastValueFrom(
+      this.http.post<any>("http://localhost:8080/order", JSON.stringify(po))
     ))
 
   }

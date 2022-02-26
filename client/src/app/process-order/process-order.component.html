@@ -7,30 +7,23 @@
     <tr>
       <td>Email: </td>
       <td><input type="text" formControlName="email"></td>
+      <td><button type="button" (click)="addInput()">Add</button></td>
     </tr>
   </table>
   <div>
-    <h3>Add your items</h3>
-    <button type="button" (click)="addItemToList(itemName.value, itemQuantity.value, itemPrice.value)">Add</button>
-  </div>
-  <table>
-    <tr>
-      <td>Item Name: </td>
-      <td><input type="text" #itemName></td>
-    </tr>
-    <tr>
-      <td>Quantity: </td>
-      <td><input type="number" #itemQuantity></td>
-    </tr>
-    <tr>
-      <td>Price: </td>
-      <td><input type="number" #itemPrice></td>
-    </tr>
-  </table>
-  <div>
-    <ul *ngFor="let item of listOfLineItem">
-      <li>Item: {{item.name}}, Qty: {{item.quantity}}, Price: {{item.price}}</li>
-    </ul>
+    <tbody formArrayName="listOfItems">
+      <tr *ngIf="lineItemFormArray.value != 0">
+        <td>Item: </td>
+        <td>Quantity: </td>
+        <td>Price: </td>
+      </tr>
+      <tr *ngFor="let item of lineItemFormArray.controls; let i=index" formGroupName="{{i}}">
+        <td><input type="text" formControlName="name"></td>
+        <td><input type="number" formControlName="quantity"></td>
+        <td><input type="number" formControlName="price"></td>
+        <td><button type="button" (click)="deleteLineItem(i)">Delete</button></td>
+      </tr>
+    </tbody>
   </div>
   <button type="submit">Place Order</button>
 </form>
