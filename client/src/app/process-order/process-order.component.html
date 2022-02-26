@@ -1,0 +1,36 @@
+<form [formGroup]="form" (ngSubmit)="placeOrder()">
+  <table>
+    <tr>
+      <td>Name: </td>
+      <td><input type="text" formControlName="name"></td>
+    </tr>
+    <tr>
+      <td>Email: </td>
+      <td><input type="text" formControlName="email"></td>
+    </tr>
+  </table>
+  <div>
+    <h3>Add your items</h3>
+    <button type="button" (click)="addItemToList(itemName.value, itemQuantity.value, itemPrice.value)">Add</button>
+  </div>
+  <table>
+    <tr>
+      <td>Item Name: </td>
+      <td><input type="text" #itemName></td>
+    </tr>
+    <tr>
+      <td>Quantity: </td>
+      <td><input type="number" #itemQuantity></td>
+    </tr>
+    <tr>
+      <td>Price: </td>
+      <td><input type="number" #itemPrice></td>
+    </tr>
+  </table>
+  <div>
+    <ul *ngFor="let item of listOfLineItem">
+      <li>Item: {{item.name}}, Qty: {{item.quantity}}, Price: {{item.price}}</li>
+    </ul>
+  </div>
+  <button type="submit">Place Order</button>
+</form>
