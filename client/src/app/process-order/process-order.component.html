@@ -25,5 +25,9 @@
       </tr>
     </tbody>
   </div>
-  <button type="submit">Place Order</button>
+  <tr>
+    <td><button type="submit" [disabled]="form.invalid">Place Order</button></td>
+    <td><button type="submit" (click)="homePage()">Back</button></td>
+  </tr>
+
 </form>

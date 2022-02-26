@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { LineItem, Po } from '../models';
 import { OrderService } from '../order.service';
 
@@ -15,7 +16,7 @@ export class ProcessOrderComponent implements OnInit {
 
   listOfLineItem: LineItem[] = []
 
-  constructor(private fb: FormBuilder, private orderService: OrderService) { }
+  constructor(private fb: FormBuilder, private orderService: OrderService, private router: Router) { }
 
   ngOnInit(): void {
     this.lineItemFormArray = this.fb.array([])
@@ -44,10 +45,15 @@ export class ProcessOrderComponent implements OnInit {
     }
     let po = new Po(this.form.value.name, this.form.value.email, this.listOfLineItem)
     this.orderService.placeOrder(po)
+    this.router.navigate([''])
   }
 
   deleteLineItem(itemNumber: number) {
     this.lineItemFormArray.removeAt(itemNumber)
+  }
+
+  homePage() {
+    this.router.navigate([''])
   }
 
 }

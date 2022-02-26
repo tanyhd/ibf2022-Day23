@@ -8,15 +8,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OrderService } from './order.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
+import { ListOrderComponent } from './list-order/list-order.component';
 
 const  appRoutes: Routes = [
-  { path: "", component: ProcessOrderComponent}
+  { path: "", component: ListOrderComponent},
+  { path: "order", component: ProcessOrderComponent}
 ]
 
 @NgModule({
   declarations: [
     AppComponent,
-    ProcessOrderComponent
+    ProcessOrderComponent,
+    ListOrderComponent
   ],
   imports: [
     BrowserModule,
