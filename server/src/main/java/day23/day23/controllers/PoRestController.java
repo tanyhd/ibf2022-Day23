@@ -1,13 +1,9 @@
 package day23.day23.controllers;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.feed.RssChannelHttpMessageConverter;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import day23.day23.models.LineItem;
 import day23.day23.models.Po;
 import day23.day23.repositories.PoRepository;
@@ -16,57 +12,56 @@ import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import jakarta.json.JsonReader;
-import jakarta.json.JsonValue;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 @RestController
-@CrossOrigin
 public class PoRestController {
     
     @Autowired
     PoRepository poRepository;
 
-    @PostMapping(path = "/order", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> placeOrder(@RequestBody byte[] payload) {
+    @PostMapping(path = "/order")
+    public ResponseEntity<String> placeOrder(@RequestBody String requestBody) {
+
         Po po = new Po();
-        try(InputStream is = new ByteArrayInputStream(payload)) {
+        boolean response = false; 
+        try(InputStream is = new ByteArrayInputStream(requestBody.getBytes())) {
 
             JsonReader reader = Json.createReader(is);
             JsonObject result = reader.readObject();
-            System.out.println(result);
             po.setName(result.getString("name"));
             po.setEmail(result.getString("email"));
 
             List<LineItem> lineItems = new ArrayList<>();
-
             JsonArray readings = result.getJsonArray("listOfItems");
-            for(JsonValue v: readings) {
+
+            for (int i = 0; i < readings.size(); i++) {
                 LineItem lineItem = new LineItem();
-                JsonObject obj = (JsonObject) v;
+                JsonObject obj = (JsonObject) readings.get(i);
                 lineItem.setName(obj.getString("name"));
-                lineItem.setQuantity(obj.getInt("quantity"));
-                lineItem.setPrice(obj.getInt("price"));
+                lineItem.setQuantity(Integer.parseInt(obj.getString("quantity")));
+                lineItem.setPrice(Float.parseFloat(obj.getString("price")));
                 lineItems.add(lineItem);
-                System.out.println(lineItem.getName());
-                System.out.println(lineItem.getPrice());
             }
-            po.setLineItems(lineItems.toArray());
-            poRepository.add(po);
-            System.out.println(po.toString());
+
+            po.setLineItems(lineItems);
+            response = poRepository.add(po);
         
         } catch (Exception e) {}
 
         JsonObjectBuilder returnMessage = Json.createObjectBuilder();
-        returnMessage.add("message", "ok created");
-
+        if(response == true) {
+            returnMessage.add("message", "order added successfully");
+        } else {
+            returnMessage.add("message", "failed to add order");
+        }
+        
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .contentType(MediaType.APPLICATION_JSON)

@@ -7,13 +7,13 @@ public class Po {
     int orderId;
     String name;
     String email;
-    LineItem[] lineItems;
+    List<LineItem> lineItems;
 
-    public LineItem[] getLineItems() {
+    public List<LineItem> getLineItems() {
         return lineItems;
     }
 
-    public void setLineItems(LineItem[] lineItems) {
+    public void setLineItems(List<LineItem> lineItems) {
         this.lineItems = lineItems;
     }
 
@@ -43,9 +43,5 @@ public class Po {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public void setLineItems(Object[] array) {
-    }
-    
 
 }
