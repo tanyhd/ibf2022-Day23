@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { PoRetrive } from '../models';
+import { OrderService } from '../order.service';
 
 @Component({
   selector: 'app-list-order',
@@ -8,9 +10,17 @@ import { Router } from '@angular/router';
 })
 export class ListOrderComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  poList: PoRetrive[] = []
+
+  constructor(private router: Router, private orderService: OrderService) { }
 
   ngOnInit(): void {
+    this.orderService.getAllPo()
+      .then(data => {
+        data.forEach(element => {
+          this.poList.push(element as PoRetrive)
+        })
+      })
   }
 
   placeOrder() {

@@ -15,3 +15,18 @@ export class Po {
   )
   {}
 }
+
+export interface PoRetrive {
+  ord_id: number,
+  name: string,
+  email: string,
+  lineItemList: LineItemRetrive[]
+  totalCost: number
+}
+
+export interface LineItemRetrive {
+  item_id: number
+  name: string
+  quantity: number
+  price: number
+}

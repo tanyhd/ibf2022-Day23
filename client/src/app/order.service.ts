@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { lastValueFrom } from "rxjs";
-import { Po } from "./models";
+import { Po, PoRetrive } from "./models";
 
 @Injectable()
 export class OrderService {
@@ -12,6 +12,13 @@ export class OrderService {
     return await(lastValueFrom(
       this.http.post<any>("http://localhost:8080/order", JSON.stringify(po))
     ))
-
   }
+
+  getAllPo() {
+    return(lastValueFrom(
+      this.http.get<PoRetrive[]>("http://localhost:8080/orderList")
+    ))
+  }
+
+
 }

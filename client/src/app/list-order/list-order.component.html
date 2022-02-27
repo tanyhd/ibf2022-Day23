@@ -1,2 +1,16 @@
-<p>list-order works!</p>
+<h1>Orders</h1>
+<table class="orderTable">
+  <tr>
+    <td>Order Id</td>
+    <td>Name</td>
+    <td>Email</td>
+    <td>Total Cost</td>
+  </tr>
+  <tr *ngFor="let i of poList">
+    <td>{{i.ord_id}}</td>
+    <td>{{i.name}}</td>
+    <td>{{i.email}}</td>
+    <td>{{i.totalCost}}</td>
+  </tr>
+</table>
 <button (click)="placeOrder()">Place Order</button>
