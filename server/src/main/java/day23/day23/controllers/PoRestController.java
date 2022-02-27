@@ -1,6 +1,7 @@
 package day23.day23.controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,6 +10,7 @@ import day23.day23.models.Po;
 import day23.day23.repositories.PoRepository;
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
+import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import jakarta.json.JsonReader;
@@ -67,4 +69,13 @@ public class PoRestController {
             .contentType(MediaType.APPLICATION_JSON)
             .body(returnMessage.build().toString());
     }
+
+
+    @GetMapping(path = "/orderList")
+    public ResponseEntity<String> getAllPo() {
+        List<Po> result = poRepository.getAllPo();
+        JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
+        result.stream().forEach(v -> arrBuilder.add(v.toJson()));
+        return ResponseEntity.ok(arrBuilder.build().toString());
+    } 
 }
